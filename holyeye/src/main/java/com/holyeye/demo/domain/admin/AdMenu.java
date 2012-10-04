@@ -28,6 +28,7 @@ public class AdMenu extends BaseEntity<Long> {
 	String menuName;
 	String url;
 	
+	
 	int displayOrder;
 	boolean displayFlag;
 	int depth = 1;
