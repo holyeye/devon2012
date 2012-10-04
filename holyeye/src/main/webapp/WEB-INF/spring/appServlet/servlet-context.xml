@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:device="http://www.springframework.org/schema/mobile/device"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/mobile/device http://www.springframework.org/schema/mobile/device/spring-mobile-device-1.0.xsd
+		">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Imports user-defined @Controller beans that process client requests -->
+	<context:component-scan base-package="com.holyeye.demo.controller" />
+
+	<mvc:annotation-driven conversion-service="conversionService"/>
+	<mvc:default-servlet-handler />
+
+	<bean id="conversionService" class="org.springframework.core.convert.support.DefaultConversionService" />
+
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.springframework.core.convert.support.ConversionServiceFactory" />
+		<property name="targetMethod" value="registerConverters" />
+		<property name="arguments">
+			<list>
+				<set>
+					<bean
+						class="org.springframework.data.repository.support.DomainClassConverter">
+						<constructor-arg ref="conversionService" />
+					</bean>
+					<bean class="com.holyeye.demo.commons.converter.StringToPersistentEnumConverterFactory" />
+					<bean class="com.holyeye.demo.commons.converter.PersistentEnumToStringConverter" />				
+				</set>
+				<ref bean="conversionService" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" order="-1000"/>
+	<mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" order="-1000"/>
+		
+	<mvc:interceptors>
+		<ref bean="openEntityManagerInViewInterceptor"/>
+		<bean class="com.holyeye.demo.commons.interceptor.AdMenuBindingInterceptor" />
+	</mvc:interceptors>
+
+	<bean id="openEntityManagerInViewInterceptor" class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<!-- velocity setting start -->
+	<bean id="velocityConfig"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="/WEB-INF/views/" />
+		<property name="velocityProperties">
+			<props>
+				<prop key="tool"></prop>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+				<!-- <prop key="velocimacro.library">VM_global_library.vm</prop> -->
+			</props>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="cache" value="true" />
+		<property name="suffix" value=".vm" />
+		<property name="contentType" value="text/html; charset=UTF-8" />
+		<property name="order" value="1" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<!-- 
+		<property name="viewClass"
+			value="com.holyeye.demo.commons.velocity.VelocityToolboxView" />
+			 -->
+		<property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml"></property>
+		<property name="attributesMap">
+			<map>
+				<entry key="serviceMode" value="#{env['serviceMode']}" />
+			</map>
+		</property>
+	</bean>
+
+
+
+</beans>

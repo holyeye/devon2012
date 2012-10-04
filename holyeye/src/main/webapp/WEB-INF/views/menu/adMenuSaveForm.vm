@@ -1,0 +1,125 @@
+#parse("/include/header.vm")
+
+<script type="text/javascript">
+
+$().ready(function() {
+
+	$("#signupForm").validate({
+	
+		rules: {
+			menuId: "required",
+			depth: {required:true, number:true},
+			menuName: "required",
+			url:"required",
+			displayOrder:{number:true, required:true}
+		}
+		
+	});
+});
+
+</script>
+<script type="text/javascript">
+
+/*
+	function formChecker(form) {
+	
+		if(!form.inputMenuId.value){
+			$("#inputMenuId").parent().parent().addClass("error");
+		}
+		
+		return false;
+	}
+*/	
+
+</script>
+
+<style type="text/css">
+input.error, textarea.error{
+  border:1px dashed red;
+}
+label.error{
+  margin-left:10px;
+  color:red;
+}
+</style>
+
+
+<form id="signupForm" class="form-horizontal" action="/menu/saveMenu" #*onsubmit="return formChecker(this);" *# >
+
+	<input type="hidden" name="id" value="$!menu.id" />
+	
+	<legend>메뉴폼</legend>
+	<div class="control-group">
+		<label class="control-label" for="menuId">MenuId</label>
+		<div class="controls">
+			<input type="text" id="menuId" name="menuId" placeholder="A01" value="$!menu.menuId">
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="parentMenuId">부모MenuId</label>
+		<div class="controls">
+			<select id="parentMenuId" name="parentMenuId">
+			<option value="" >-</option>
+			#foreach ($rootMenu in $rootMenus)
+			<option value="$rootMenu.id" #if($rootMenu.id == $menu.parentAdMenu.id) selected #end>$rootMenu.menuName</option>
+			#end
+		</select>			
+		</div>
+	</div>
+	  
+	<div class="control-group">
+		<label class="control-label" for="menuName">메뉴명</label>
+		<div class="controls">
+			<input type="text" id="menuName" name="menuName" placeholder="홈메뉴" value="$!menu.menuName">
+		</div>
+	</div>
+	  
+	<div class="control-group">
+		<label class="control-label" for="url">URL</label>
+		<div class="controls">
+			<input type="text" id="url" name="url" placeholder="/daum.net" value="$!menu.url">
+		</div>
+	</div>
+	  
+	<div class="control-group">
+		<label class="control-label" for="displayOrder">노출 순서</label>
+		<div class="controls">
+			<input type="text" id="displayOrder" name="displayOrder" placeholder="1" value="$!menu.displayOrder">
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="targetType">targetType</label>
+		<div class="controls">
+			##<input type="text" id="targetType" name="targetType" placeholder="S" value="$!menu.targetType">
+			<select id="targetType" name="targetType">
+				#foreach ($entry in $!{targetTypeOptions.entrySet()})
+				<option value="$entry.key" #if($entry.key == $menu.targetType.value) selected #end>$entry.value</option>
+				#end
+			</select>
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="description">설명</label>
+		<div class="controls">
+			<input type="text" id="description" name="description" placeholder="설명" value="$!menu.description">
+		</div>
+	</div>
+	  
+	<div class="control-group">
+		<div class="controls">
+			<label class="checkbox">
+			<input type="checkbox" name="displayFlag" #if($menu.displayFlag) checked #end> 노출시 체크
+			</label>
+		</div>
+	</div>
+	
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary">저장</button>
+		<button type="button" class="btn" onclick="javascript:history.back(-1)">취소</button>
+	</div>
+</form>
+
+#parse("/include/footer.vm")

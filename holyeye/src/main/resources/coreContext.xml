@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+		
+		
+	<util:properties id="env" location="classpath:coreEnv.properties" />
+
+	<context:component-scan base-package="com.holyeye.demo">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- enable autowire -->
+	<context:annotation-config />
+
+	<!-- enable aop -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- enable transaction demarcation with annotations -->
+	<tx:annotation-driven proxy-target-class="true" />
+
+	<!-- DB -->
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="persistenceUnitName" value="spring-jpa" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="false" />
+                <property name="generateDdl" value="false" />
+                <property name="database" value="HSQL" />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    
+    <jdbc:initialize-database data-source="dataSource">
+    	<jdbc:script location="classpath:start_ddl.sql" />
+    	<jdbc:script location="classpath:start_data.sql" />
+    </jdbc:initialize-database>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="#{env['db.driverClassName']}"
+		p:url="#{env['db.url']}" p:username="#{env['db.username']}"
+		p:password="#{env['db.password']}" p:maxActive="#{env['db.maxActive']}" />
+
+	<!-- 
+    <jdbc:embedded-database id="dataSource" type="HSQL" />
+	  -->
+	  
+	 <!-- 
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="#{env['db.driverClassName']}"
+		p:url="#{env['db.url']}" p:username="#{env['db.username']}"
+		p:password="#{env['db.password']}" p:maxActive="#{env['db.maxActive']}" />
+		
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+			</bean>
+		</property>
+		<property name="persistenceUnitName" value="spring-jpa" />
+	</bean>
+	
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    -->
+	
+	<jpa:repositories base-package="com.holyeye.demo.repository" />	
+
+
+	<!-- define the SqlSessionFactory -->
+	<!-- 
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.holyeye.demo.entity" />
+		<property name="configLocation" value="classpath:MapperConfig.xml" />
+	</bean>
+	-->
+
+	<!-- scan for mappers and let them be autowired -->
+	<!-- 
+	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="basePackage" value="net.daum.crm.persistence" />
+	</bean>
+	 -->
+	
+	
+</beans>

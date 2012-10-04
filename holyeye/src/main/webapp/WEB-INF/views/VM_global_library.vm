@@ -1,0 +1,249 @@
+#macro( isDebug )#if( $StringUtils.equals( "${ParameterTool.debug}", "y" ) && ($StringUtils.equals("$!{serviceMode}", "local") || $StringUtils.equals("$!{serviceMode}", "test")) )true#{else}false#end#end
+#macro( commentHeader )<div class="ft_comment" style="border: 2px solid red;background-color:#f5f5f5;padding:10px;"><p style="background-color:#eee; margin-bottom: 20px;">개발자 코멘트 영역</p>#end
+#macro( commentFooter )</div>#end
+
+## String
+#macro(cutStripString $str $len)$!StringUtil.cutStringRealLength("$!{str}", ${len}, "...")#end
+#macro(cutStringDotSpace $str $len)$!StringUtil.cutStringRealLength("$!{str}", ${len}, ". .")#end
+#macro(cutString $str $len)$!StringUtil.cutStringRealLength("$!{str}", ${len}, "..")#end
+#macro(cutTidyString $str $len)$!StringUtil.cutStringRealLength("$!{str}", ${len}, "")#end
+#macro(addComma $strNum )#if( $StringUtils.isEmpty( "$!{strNum}") )#set($strNum="0")#end$!NumberTool.integer($strNum)#end
+#macro(escHtml $str )$!EscapeTool.html( $str )#end
+#macro(escJavascript $str )$!EscapeTool.javascript( $str )#end
+#macro(stripHtml $data $len)#set($temp = $!data.replaceAll('(?i)<(\?|/)?(([a-zA-Z]*[0-9]?):(.*?)|[a-zA-Z]*[1-6]?)(\s[a-zA-Z]*=[^>]*)?(\s)*(/)?>',''))$!temp#end
+#macro(checkHttpProtocol $url)#if( $StringUtils.indexOf( $!{url}, "http://") == -1 )#set( $url = "http://" + $url )#end$!url#end
+#macro(getValidUrl $url)$url.replaceAll("&amp;","&").replaceAll("&","&amp;")#end
+
+## Date
+#macro(YYYYMMDD $str)$!StringUtils.left($str, 4).$!StringUtils.mid($str, 4, 2).$!StringUtils.mid($str, 6, 2)#end
+	
+##
+#macro(getRegionIdByText $name)
+#if( $StringUtils.equals("강원", "$!{name}") )A##
+#elseif( $StringUtils.equals("경기", "$!{name}") )B##
+#elseif( $StringUtils.equals("경남", "$!{name}") )C##
+#elseif( $StringUtils.equals("경북", "$!{name}") )D##
+#elseif( $StringUtils.equals("광주", "$!{name}") )E##
+#elseif( $StringUtils.equals("대구", "$!{name}") )F##
+#elseif( $StringUtils.equals("대전", "$!{name}") )G##
+#elseif( $StringUtils.equals("부산", "$!{name}") )H##
+#elseif( $StringUtils.equals("서울", "$!{name}") )I##
+#elseif( $StringUtils.equals("울산", "$!{name}") )J##
+#elseif( $StringUtils.equals("인천", "$!{name}") )K##
+#elseif( $StringUtils.equals("전남", "$!{name}") )L##
+#elseif( $StringUtils.equals("전북", "$!{name}") )M##
+#elseif( $StringUtils.equals("제주", "$!{name}") )N##
+#elseif( $StringUtils.equals("충남", "$!{name}") )O##
+#elseif( $StringUtils.equals("충북", "$!{name}") )P##
+#elseif( $StringUtils.equals("해외", "$!{name}") )Z##
+#end##
+#end
+
+##모바일 비POS moneyTextView매크로.
+##공백입력시 0으로 표시,
+##숫자 입력시 3자리 마다 끈어서 , 입력
+#macro(moneyTextView $num)#if($num)#addComma($num)#{else}0#end#end
+##모바일 비POS fillZero
+#macro(fillZero $num $cnt)
+#if($num)
+#set($ret = "")
+#foreach($eh in [1..$cnt])0#end$num
+#{else}
+0
+#end
+#end
+
+
+## 단위 환산 km 또는 m 
+#macro(convertDistUnit $dist)
+#if($!{dist})##
+#set($slen = $StringUtils.length("$dist"))##
+#if($!{slen} >= 4)##
+#set($splitPos = ($slen - 3))##
+#set($bigNum = $StringUtils.substring("$dist",0,$splitPos))##
+#set($endPos = $slen - 2)##
+#set($smallNum = $StringUtils.substring("$dist",$splitPos,$endPos))##
+${bigNum}.${smallNum}km##
+#else##
+$!{data.distance}m##
+#end##
+#end##
+#end
+
+#**
+ * 모바일용 썸네일 호출
+ * @param String url
+ * @param String size
+ **#
+#macro(getThumbUrl $url $size )##
+#if( $StringUtils.contains( "$!{url}", "uf.daum.net" ) )##
+#if($!{size})##
+#set($tempUrl = $!StringUtils.replace( "$!{url}", ".uf.daum.net/image", "/$!{size}"))##
+#else##
+#set($tempUrl = $!StringUtils.replace( "$!{url}", ".uf.daum.net/image", "/image"))##
+#end##
+#set($resultUrl = $!StringUtils.replace( "$!{tempUrl}", "http://", "//m1.daumcdn.net/"))##
+$!StringUtils.trim($!{resultUrl})##
+#else##
+$!StringUtils.replace( "$!{url}", "/image/", "/$!{size}/" )##
+#end##
+#end
+
+#**
+ * PC용 썸네일 호출
+ * @param String url
+ * @param String size
+ * @desc url과 size를 넣으면 썸네일 URL 을 뱉어준다.
+ * @usage
+ * #image( $url, "R214x225" )
+ **************************************
+ * TODO: 필요한 썸네일
+ * C66x155
+ * C84x64
+ * C124x124
+ * C165x151
+ ***************************************
+ * 사용가능 썸네일
+ * C42x37
+ * C50x52
+ * C56x41
+ * C58x51
+ * C94x84
+ * C100x50
+ * C102x76
+ * C108x80
+ * C152x76
+ * C145x130
+ * C210x310
+ * C283x282
+ * C298x148
+ * C320x162
+ ***************************************#
+#macro( image $url $size )
+#if( "$!{url}" != "" && $url.indexOf( 'cfile' ) > -1 )##
+#*	*##set( $temp = $EscapeTool.url( $url ).toString().length() )##
+#*	*##set( $cdnIdx = $temp % 2 + 1 )##
+#*	*##set( $cdnurl = $url.replaceAll('(?i).*(cfile\d+).uf.daum.net', "//i$!{cdnIdx}.daumcdn.net/$1" ) )##
+#*	*##if("$!{size}"!="")##
+#*	*#$cdnurl.replace('image', "$!{size}").replace('attach', "$!{size}")##
+#*	*##{else}$cdnurl#end##
+## 한 이미지에 대해 i1, 또는 i2 서버를 택1하여 사용하게 한다.
+## 이미지 경로를 utf-8로 인코딩한 스트링의 길이가 홀수일 경우 i2, 짝수일 경우 i1를 선택한다. 
+#elseif( "$!url" != "" )##
+#*	*#$!{url}##
+#end
+#end
+
+#**
+ * @param String key
+ * @param String value
+ * @param String url
+ * @desc 현재 파라미터에 영향을 주지 않는 쿼리스트링을 설정한다.
+ * @useage
+ * #setQueryString( "key", "value")
+ *#
+#macro( setQueryString $key $value $url )##
+#if("$!{url}" != "")##
+#set( $qs = $!url.replaceAll("(\&|\?|)$!{key}=(\w+|)", "") )##
+#else##
+#set( $qs = $!request.getQueryString().replaceAll("(\&|\?|)$!{key}=(\w+|)", "") )#end##
+?$!{key}=$!{value}#if("$!{qs}" != "")#if(!($!StringUtils.startsWith($!{qs}, "&")))&#end$!{qs}#end##
+#end##
+
+#**
+ * @param List<Map> list
+ * @desc 현재 파라미터에 영향을 주지 않는 쿼리스트링을 설정한다. (Map 사용)
+ * @useage
+ * #setQueryStrings( [{"key1":"value1"},{"key2":"value2"}] )
+ *#
+#macro( setQueryStrings $list )
+#if( $list.size() > 0 )
+#set ( $keyList = $list.keySet() )
+#foreach( $key in $keyList )
+#if( $velocityCount > 1 )&#{end}##
+$!{key}=$!{list.get($key)}##
+#end
+#end
+#end
+
+#**
+ * @param String d
+ * @desc 오늘 날짜와 비교하여 작성당일에는 작성한 시간을 노출함 
+ *#
+#macro( getDateOrTime $d )##
+#if("$!{StringUtils.left($d,8)}" == "$!{date.get('yyyyMMdd')}")$!StringUtils.mid($d, 8, 2):$!StringUtils.mid($d, 10, 2):$!StringUtils.mid($d, 12, 2)##
+#{else}#YYYYMMDD($d)#end##
+#end##
+
+## String Type 의 숫자를 Image 로 Markup.
+## @param String str
+## @param String base
+## @desc 변환할 숫자(str)와 Markup 에 사용할 기본 클래스명(base)를 지정.
+## @useage
+## #toImage( $str , "num_store" )
+#macro( toImage $str $base )
+	#set( $str = $!{str.toString()} )
+	#set( $len = $!{MathTool.sub($str.length(), 1)} )
+	#foreach( $idx in [0..$len] )
+		#if( $!{str.charAt($idx)} == "," )
+			#set( $key = "comma" )
+		#else
+			#set( $key = "num" + $!{str.charAt($idx)} ) 
+		#end
+		<span class="$!{base} $!{key}#if($!{idx} == '3' || $!{idx} == '5') space#end">$!{str.charAt($idx)}</span>		
+	#end
+#end
+
+## Page 를 Markup 해준다.
+## @param String $URL
+## @param String $PAGE
+## @param String $PARAMS
+## @param String $WRAPCLASS 추가클래스가 있다면 입력
+## useage
+## #makePagination( "", $!{param.pageinfo}, $!{request.getQueryString()}, "paging_layer" )
+#macro( makePagination $URL $PAGE $PARAMS $WRAPCLASS)
+	#set( $PARAMS = $PARAMS.replaceAll("pageCond=\d+\&?", "") )
+	#if( "$!{PARAMS}" != "" )
+		#set( $PARAMS = "&" + $PARAMS )
+	#end
+	
+	#if( $!{PAGE} && $!{PAGE.totalCount} > 0 )
+    <div class="paging_comm $!{WRAPCLASS}">
+    	#if( $!{PAGE.hasPrevPageGroup} )
+    		<a href="$!{URL}?pageCond=$!{PAGE.prevPageOfGroup}$!{PARAMS}" class="btn_page btn_next"><span class="screen_out">이전</span>$!{PAGE.startPageOfPrevGroup}~$!{PAGE.endPageOfPrevGroup}</a>
+    	#end
+    	
+    	#foreach( $idx in [$!{PAGE.firstPageInGroup}..$!{PAGE.lastPageInGroup}] )
+    		#if( $!{PAGE.page} == $!{idx} )
+    			<span class="screen_out">현재페이지</span><em class="btn_page">$!{idx}</em>
+    		#else
+    			<a href="$!{URL}?pageCond=$!{idx}$!{PARAMS}" class="btn_page">$!{idx}</a>
+    		#end
+    	#end
+    	
+    	#if( $!{PAGE.hasNextPageGroup} )
+    		<a href="$!{URL}?pageCond=$!{PAGE.nextPageOfGroup}$!{PARAMS}" class="btn_page btn_next"><span class="screen_out">다음</span>$!{PAGE.startPageOfNextGroup}~$!{PAGE.endPageOfNextGroup}</a>
+    	#end	
+    </div>
+	#end
+#end
+
+## 단골상세 레이어 > 단골소식 게시판 컨트롤러를 Markup 해준다.
+## @param String $list
+## @param String $prev
+## @param String $next
+## @param String $event
+## useage
+## #makeBoardCtrl( $!{message}, $!{messageUp}, $!{messageDown}, "return Dangol.getAlimFrom( this.href );" )
+#macro( makeBoardCtrl $list $prev $next $event )
+	#set( $defaultParam = "pageCond=$!{alimParam.pageCond}" )
+    <ul class="ctr_list">
+		<li class="tab_list"><a href="$!{HTTP_URL}/membership/alimlist_frag.daum?mshipseq=$!{list.mshipseq}&referrer=my&tab=messagelist&$!{defaultParam}" class="link_tab" onclick="$!{event}">목록</a></li>
+    	#if( $!{prev} )
+    	<li class="tab_prev"><a href="$!{HTTP_URL}/membership/alimdetail_frag.daum?mshipseq=$!{prev.mshipseq}&alimseqCond=$!{prev.alimseq}&$!{defaultParam}" class="link_tab" onclick="$!{event}">윗글</a></li>
+    	#end
+    	#if( $!{next} )
+    	<li class="tab_next"><a href="$!{HTTP_URL}/membership/alimdetail_frag.daum?mshipseq=$!{next.mshipseq}&alimseqCond=$!{next.alimseq}&$!{defaultParam}" class="link_tab" onclick="$!{event}">아랫글</a></li>
+    	#end
+    </ul>
+#end

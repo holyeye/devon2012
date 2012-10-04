@@ -1,0 +1,30 @@
+        </div><!--/span-->
+      </div><!--/row-->
+      <hr>
+
+      <footer>
+        <p>&copy; Company 2012</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="${JS}/bootstrap-transition.js"></script>
+    <script src="${JS}/bootstrap-alert.js"></script>
+    <script src="${JS}/bootstrap-modal.js"></script>
+    <script src="${JS}/bootstrap-dropdown.js"></script>
+    <script src="${JS}/bootstrap-scrollspy.js"></script>
+    <script src="${JS}/bootstrap-tab.js"></script>
+    <script src="${JS}/bootstrap-tooltip.js"></script>
+    <script src="${JS}/bootstrap-popover.js"></script>
+    <script src="${JS}/bootstrap-button.js"></script>
+    <script src="${JS}/bootstrap-collapse.js"></script>
+    <script src="${JS}/bootstrap-carousel.js"></script>
+    <script src="${JS}/bootstrap-typeahead.js"></script>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+
+  </body>
+</html>
