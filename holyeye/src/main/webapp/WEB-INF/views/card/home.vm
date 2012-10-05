@@ -1,0 +1,55 @@
+#parse("/include/header.vm")
+
+	<link rel="stylesheet" href="${CSS}/jquery-ui/jquery.ui.all.css">
+	##<link rel="stylesheet" href="${CSS}/jquery-ui/jquery-ui-1.8.23.css">
+	<script src="${JS}/jquery-ui-1.8.23.min.js"></script>
+	
+	<style type="text/css">
+	#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+	#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+	#sortable li span { position: absolute; margin-left: -1.3em; }
+	</style>
+	
+	<script>
+	$(function() {
+		$( "#sortable" ).sortable();
+		$( "#sortable" ).disableSelection();
+	});
+	</script>
+	
+	<script type="text/javascript">
+		function insertForm(){
+			location.href = "/card/cardSaveForm";
+		}
+	</script>
+
+	<div class="content">
+		
+		<h3>카드관리</h3>
+		<hr>
+		<button class="btn btn-primary" type="button" onclick="insertForm();">등록</button>
+
+		<table class="table table-striped table-bordered">
+		  <caption>카드목록</caption>
+		  <thead>
+		    <tr>
+		      <th>NO</th>
+		      <th>카드명</th>
+		      <th id="ccc">적립률</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  #foreach ($card in $!{cards})
+		    <tr>
+		      <td><a href="/card/cardUpdateForm?id=$card.id">$card.id</a></td>
+		      <td><a href="/card/cardUpdateForm?id=$card.id">$card.name</a></td>
+		      <td>$card.rate%</td>
+		    </tr>
+		    #end
+		  </tbody>			
+		</table>
+			
+		
+	</div>
+
+#parse("/include/footer.vm")

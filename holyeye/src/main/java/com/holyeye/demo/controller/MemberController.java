@@ -35,21 +35,21 @@ public class MemberController {
 		return "member/home";
 	}
 
-	@RequestMapping("/member/memberSaveForm")
-	public String adMenuSaveForm(Member member) {
+	@RequestMapping("member/memberSaveForm")
+	public String memberSaveForm(Member member) {
 
 		return "member/memberSaveForm";
 	}
 
-	@RequestMapping("/member/saveMember")
+	@RequestMapping("member/saveMember")
 	public String saveMenu(Member member) {
 
 		memberRepository.save(member);
 		return "redirect:/member/home";
 	}
 
-	@RequestMapping("/member/memberUpdateForm")
-	public String adMenuUpdateForm(@RequestParam("id") Member member, Model model) {
+	@RequestMapping("member/memberUpdateForm")
+	public String memberUpdateForm(@RequestParam("id") Member member, Model model) {
 
 		model.addAttribute("member", member);
 		return "member/memberSaveForm";

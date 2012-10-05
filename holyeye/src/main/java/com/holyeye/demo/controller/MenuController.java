@@ -34,7 +34,7 @@ public class MenuController {
 	@PersistenceContext
 	EntityManager em;
 	
-	@RequestMapping("/menu/home")
+	@RequestMapping("menu/home")
 	public String list(Model model) {
 		log.debug("메뉴관리");
 
@@ -49,7 +49,7 @@ public class MenuController {
 		return "menu/home";
 	}
 	
-	@RequestMapping("/menu/adMenuSaveForm")
+	@RequestMapping("menu/adMenuSaveForm")
 	public String adMenuSaveForm(AdMenu adMenu, Model model) {
 		
 		List<AdMenu> rootMenus = (List<AdMenu>) adMenuRepository.findAll(depth(1));
@@ -59,7 +59,7 @@ public class MenuController {
 		return "menu/adMenuSaveForm";
 	}
 	
-	@RequestMapping("/menu/adMenuUpdateForm")
+	@RequestMapping("menu/adMenuUpdateForm")
 	public String adMenuUpdateForm(@RequestParam("id") AdMenu adMenu, Model model) {
 		
 		List<AdMenu> rootMenus = (List<AdMenu>) adMenuRepository.findAll(depth(1));
@@ -71,7 +71,7 @@ public class MenuController {
 	}
 	
 	
-	@RequestMapping("/menu/saveMenu")
+	@RequestMapping("menu/saveMenu")
 	public String saveMenu(AdMenu adMenu, @RequestParam("parentMenuId") Long parentMenuId, BindingResult result) {
 		
 		log.debug("메뉴저장");
@@ -87,7 +87,7 @@ public class MenuController {
 		return "redirect:/menu/home";
 	}
 	
-	@RequestMapping("/menu/test")
+	@RequestMapping("menu/test")
 	@Menu("")
 	public @ResponseBody String test() {
 		
@@ -102,7 +102,7 @@ public class MenuController {
 	}
 	
 	
-	@RequestMapping("/menu/testall")
+	@RequestMapping("menu/testall")
 	@Menu("")
 	public @ResponseBody String testall() {
 		

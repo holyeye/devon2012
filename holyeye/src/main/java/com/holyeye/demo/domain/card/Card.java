@@ -15,4 +15,6 @@ import com.holyeye.demo.domain.BaseEntity;
 public class Card extends BaseEntity<Long>{
 
 	private String name;
+	private int rate;
+	
 }
