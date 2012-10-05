@@ -13,6 +13,18 @@ import lombok.Getter;
 @Entity
 public class CardPoint extends BaseEntity<Long>{
 
+	public CardPoint() {
+	}
+	
+	public CardPoint(String title, int money, int rate) {
+		
+		System.out.println("CardPoint.CardPoint()" + money + "/" + rate);
+		this.title = title;
+		this.money = money;
+		this.rate = rate;
+		this.point = (money * rate)/100;
+	}
+
 	private String title;
 	private int money;
 	private int point;

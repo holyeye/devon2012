@@ -1,41 +1,54 @@
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004210757', NULL, '20121004210757', 1, 'ë©”ë‰´ê´€ë¦¬', 1, 1, 'A01', 'ë©”ë‰´ê´€ë¦¬', NULL, 'S', '/menu/home');
+values (default, NULL, '20121004210757', NULL, '20121004210757', 1, '¸Ş´º°ü¸®', 1, 1, 'A01', '¸Ş´º°ü¸®', NULL, 'S', '/menu/home');
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004210919', NULL, '20121004210919', 2, 'ë©”ë‰´ ê´€ë¦¬', 1, 1, 'A0101', 'ë©”ë‰´ ê´€ë¦¬', 1, 'S', '/menu/home') 
+values (default, NULL, '20121004210919', NULL, '20121004210919', 2, '¸Ş´º °ü¸®', 1, 1, 'A0101', '¸Ş´º °ü¸®', 1, 'S', '/menu/home') 
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004210957', NULL, '20121004210957', 2, '', 1, 2, 'A0102', 'ë©”ë‰´ í†µê³„', 1, 'S', '/menu/home') 
+values (default, NULL, '20121004210957', NULL, '20121004210957', 2, '', 1, 2, 'A0102', '¸Ş´º Åë°è', 1, 'S', '/menu/home') 
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004211110', NULL, '20121004211110', 1, 'íšŒì›ê´€ë¦¬', 1, 1, 'B01', 'íšŒì›ê´€ë¦¬', NULL, 'S', '/member/home') 
+values (default, NULL, '20121004211110', NULL, '20121004211110', 1, 'È¸¿ø°ü¸®', 1, 1, 'B01', 'È¸¿ø°ü¸®', NULL, 'S', '/member/home') 
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004211207', NULL, '20121004211207', 2, 'íšŒì›ê´€ë¦¬', 1, 1, 'B0101', 'íšŒì› ê´€ë¦¬', 4, 'S', '/member/home') 
+values (default, NULL, '20121004211207', NULL, '20121004211207', 2, 'È¸¿ø°ü¸®', 1, 1, 'B0101', 'È¸¿ø °ü¸®', 4, 'S', '/member/home') 
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004211345', NULL, '20121004211345', 2, '', 1, 2, 'B0102', 'íšŒì› í†µê³„', 4, 'S', '/member/home') 
+values (default, NULL, '20121004211345', NULL, '20121004211345', 2, '', 1, 2, 'B0102', 'È¸¿ø Åë°è', 4, 'S', '/member/home') 
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004211625', NULL, '20121004211625', 1, 'ì¹´ë“œê´€ë¦¬', 1, 1, 'C01', 'ì¹´ë“œê´€ë¦¬', NULL, 'S', '/card/home') 
+values (default, NULL, '20121004211625', NULL, '20121004211625', 1, 'Ä«µå°ü¸®', 1, 1, 'C01', 'Ä«µå°ü¸®', NULL, 'S', '/card/home') 
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121004211659', NULL, '20121004211659', 2, 'ì¹´ë“œ ê´€ë¦¬', 1, 1, 'C0101', 'ì¹´ë“œ ê´€ë¦¬', 7, 'S', '/card/home') 
-
-
-insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
-description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121005172126', NULL, '20121005172126', 1, '', 1, 4, 'D01', 'íšŒì›ì¹´ë“œê´€ë¦¬', NULL, 'S', '/memberCard/regForm') 
+values (default, NULL, '20121004211659', NULL, '20121004211659', 2, 'Ä«µå °ü¸®', 1, 1, 'C0101', 'Ä«µå °ü¸®', 7, 'S', '/card/home') 
 
 
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
-values (default, NULL, '20121005172238', NULL, '20121005172238', 2, '', 1, 1, 'D0101', 'íšŒì›ì¹´ë“œì‹ ì²­', 9, 'S', '/memberCard/regForm') 
+values (default, NULL, '20121005172126', NULL, '20121005172126', 1, '', 1, 4, 'D01', 'È¸¿øÄ«µå°ü¸®', NULL, 'S', '/memberCard/home') 
+
+
+insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
+description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
+values (default, NULL, '20121005172238', NULL, '20121005172238', 2, '', 1, 1, 'D0101', 'È¸¿øÄ«µå°ü¸®', 9, 'S', '/memberCard/home') 
+
+insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
+description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
+values (default, NULL, '20121005172238', NULL, '20121005172238', 2, '', 1, 1, 'D0102', 'È¸¿øÄ«µå½ÅÃ»', 9, 'S', '/memberCard/memberCardSaveForm') 
+
+
+insert into Member (id, age, name) values (default, 27, '¼­ÇıÁö') 
+insert into Member (id, age, name) values (default, 26, '±èº¸¹Ì')
+
+
+insert into Card (id, name, rate) values (default, 'Devon¸â¹ö½ÊÄ«µå', 10)
+
+insert into MemberCard (id, card_id, member_id) values (default, 1, 1) 

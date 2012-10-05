@@ -41,24 +41,35 @@ label.error{
 </style>
 
 
-<form id="signupForm" class="form-horizontal" action="/card/saveCard" #*onsubmit="return formChecker(this);" *# >
+<form id="signupForm" class="form-horizontal" action="/memberCard/saveMemberCard" #*onsubmit="return formChecker(this);" *# >
 
-	<input type="hidden" name="id" value="$!card.id" />
+	<input type="hidden" name="id" value="$!member.id" />
 	
-	<legend>카드폼</legend>
+	<legend>회원카드신청폼</legend>
 	<div class="control-group">
-		<label class="control-label" for="name">이름</label>
+		<label class="control-label" for="parentMenuId">신청회원</label>
 		<div class="controls">
-			<input type="text" id="name" name="name" placeholder="다음멤버십카드" value="$!card.name">
+			<select id="memberId" name="memberId">
+			<option value="" >-</option>
+			#foreach ($member in $members)
+			<option value="$member.id">$member.name</option>
+			#end
+		</select>			
 		</div>
 	</div>
 	
 	<div class="control-group">
-		<label class="control-label" for="age">적립률</label>
+		<label class="control-label" for="parentMenuId">발급카드</label>
 		<div class="controls">
-			<input type="text" id="rate" name="rate" placeholder="10" value="$!card.rate">%
+			<select id="cardId" name="cardId">
+			<option value="" >-</option>
+			#foreach ($card in $cards)
+			<option value="$card.id" >$card.name</option>
+			#end
+		</select>			
 		</div>
 	</div>
+	
 	
 	<div class="form-actions">
 		<button type="submit" class="btn btn-primary">저장</button>

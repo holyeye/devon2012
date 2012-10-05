@@ -1,0 +1,98 @@
+#parse("/include/header.vm")
+
+<script type="text/javascript">
+
+$().ready(function() {
+
+	$("#signupForm").validate({
+	
+		rules: {
+			name: "required",
+			age: {required:true, number:true}
+		}
+		
+	});
+});
+
+</script>
+<script type="text/javascript">
+
+/*
+	function formChecker(form) {
+	
+		if(!form.inputMenuId.value){
+			$("#inputMenuId").parent().parent().addClass("error");
+		}
+		
+		return false;
+	}
+*/	
+
+</script>
+
+<style type="text/css">
+input.error, textarea.error{
+  border:1px dashed red;
+}
+label.error{
+  margin-left:10px;
+  color:red;
+}
+</style>
+
+
+<form id="signupForm" class="form-horizontal">
+
+	<input type="hidden" name="id" value="$!member.id" />
+	
+	<legend>회원카드신청폼</legend>
+	<div class="control-group">
+		<label class="control-label" for="menuName">회원명</label>
+		<div class="controls">
+			<input type="text" id="memberName" name="memberName" value="$memberCard.member.name">
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="menuName">카드명</label>
+		<div class="controls">
+			<input type="text" id="cardName" name="cardName" value="$memberCard.card.name">
+		</div>
+	</div>
+	
+	<div>
+		
+		<table class="table table-striped table-bordered">
+		  <caption>적립내역</caption>
+		  <thead>
+		    <tr>
+		      <th>NO</th>
+		      <th>카드명</th>
+		      <th>금액</th>
+		      <th>적립률</th>
+		      <th>적립금</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  #foreach ($cardPoint in $!{memberCard.cardPoints})
+		    <tr>
+		      <td>$cardPoint.id</td>
+		      <td>$cardPoint.title</td>
+		      <td>$cardPoint.money</td>
+		      <td>$cardPoint.rate%</td>
+		      <td>$cardPoint.point</td>
+		    </tr>
+		    #end
+		  </tbody>			
+		</table>
+			
+		
+	</div>
+	
+	
+	<div class="form-actions">
+		<button type="button" class="btn btn-primary" onclick="javascript:history.back(-1)">확인</button>
+	</div>
+</form>
+
+#parse("/include/footer.vm")

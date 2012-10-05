@@ -1,0 +1,79 @@
+#parse("/include/header.vm")
+
+	<link rel="stylesheet" href="${CSS}/jquery-ui/jquery.ui.all.css">
+	##<link rel="stylesheet" href="${CSS}/jquery-ui/jquery-ui-1.8.23.css">
+	<script src="${JS}/jquery-ui-1.8.23.min.js"></script>
+	
+	<style type="text/css">
+	#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+	#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+	#sortable li span { position: absolute; margin-left: -1.3em; }
+	</style>
+	
+	<script>
+	$(function() {
+		$( "#sortable" ).sortable();
+		$( "#sortable" ).disableSelection();
+	});
+	</script>
+	
+	<script type="text/javascript">
+	
+		function insertForm(){
+			location.href = "/memberCard/memberCardSaveForm";
+		}
+		
+		function payMoney(memberCardId) {
+		
+			var money = prompt("결제금액을 입력해 주세요.");
+			
+			if(!money) {
+				return;
+			}
+			
+			$("#money").val(money);
+			$("#memberCardId").val(memberCardId);
+			$("#payForm").submit();
+		
+		}
+	</script>
+	
+	<form id="payForm" name="payForm" action="/memberCard/payMoney">
+		<input type="hidden" id="memberCardId" name="memberCardId" />
+		<input type="hidden" id="money" name="money" />
+	</form>
+
+	<div class="content">
+		
+		<h3>회원카드관리</h3>
+		<hr>
+		<button class="btn btn-primary" type="button" onclick="insertForm();">등록</button>
+
+		<table class="table table-striped table-bordered">
+		  <caption>회원카드목록</caption>
+		  <thead>
+		    <tr>
+		      <th>NO</th>
+		      <th>회원명</th>
+		      <th>카드명</th>
+		      <th>현재 적립금</th>
+		      <th>설정</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  #foreach ($memberCard in $!{memberCards})
+		    <tr>
+		      <td><a href="/memberCard/memberCardDetail?id=$memberCard.id">$memberCard.id</a></td>
+		      <td>$memberCard.member.name</a></td>
+		      <td>$memberCard.card.name</td>
+		      <td>$memberCard.totalPoint</td>
+		      <td><button class="btn btn-danger" type="button" onclick="payMoney($memberCard.id);">결제하기</button></td>
+		    </tr>
+		    #end
+		  </tbody>			
+		</table>
+			
+		
+	</div>
+
+#parse("/include/footer.vm")
