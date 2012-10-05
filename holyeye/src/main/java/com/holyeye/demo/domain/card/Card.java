@@ -19,8 +19,7 @@ public class Card extends BaseEntity<Long>{
 	private int rate;
 	
 	public CardPoint createCardPoint(int money) {
-		CardPoint cardPoint = new CardPoint(name,money,rate);
-		return cardPoint;
+		return new CardPoint(name,money,rate);
 	}
 	
 }

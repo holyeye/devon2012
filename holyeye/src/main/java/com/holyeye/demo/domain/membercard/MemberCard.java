@@ -55,8 +55,6 @@ public class MemberCard extends BaseEntity<Long>{
 	//BIZ
 	public void payMoney(int money) {
 		CardPoint createCardPoint = card.createCardPoint(money);
-		
-		log.debug("createCardPoint = {}", createCardPoint.getMoney());
 		addCardPoint(createCardPoint);
 	}
 	
