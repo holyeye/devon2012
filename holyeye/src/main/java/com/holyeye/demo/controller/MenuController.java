@@ -25,7 +25,7 @@ import com.holyeye.demo.repository.AdMenuRepository;
 import com.mysema.query.types.Predicate;
 
 @Slf4j
-@Menu("A01")
+@Menu("A0101")
 @Controller
 public class MenuController {
 

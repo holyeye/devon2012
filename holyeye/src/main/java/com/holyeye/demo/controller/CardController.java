@@ -15,7 +15,7 @@ import com.holyeye.demo.domain.card.Card;
 import com.holyeye.demo.repository.CardRepository;
 
 @Slf4j
-@Menu("C01")
+@Menu("C0101")
 @Controller
 public class CardController {
 

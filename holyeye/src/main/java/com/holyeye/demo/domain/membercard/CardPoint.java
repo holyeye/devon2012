@@ -14,6 +14,8 @@ import lombok.Getter;
 public class CardPoint extends BaseEntity<Long>{
 
 	private String title;
+	private int money;
 	private int point;
+	private int rate;
 	
 }

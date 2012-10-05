@@ -29,3 +29,13 @@ values (default, NULL, '20121004211625', NULL, '20121004211625', 1, '카드관�
 insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
 description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
 values (default, NULL, '20121004211659', NULL, '20121004211659', 2, '카드 관리', 1, 1, 'C0101', '카드 관리', 7, 'S', '/card/home') 
+
+
+insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
+description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
+values (default, NULL, '20121005172126', NULL, '20121005172126', 1, '', 1, 4, 'D01', '회원카드관리', NULL, 'S', '/memberCard/regForm') 
+
+
+insert into TEST_ADMENU (id, createdBy, createdDttm, lastModifiedBy, lastModifiedDttm, depth, 
+description, displayFlag, displayOrder, menuId, menuName, parentAdMenu_id, targetType, url) 
+values (default, NULL, '20121005172238', NULL, '20121005172238', 2, '', 1, 1, 'D0101', '회원카드신청', 9, 'S', '/memberCard/regForm') 

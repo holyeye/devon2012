@@ -20,7 +20,7 @@ import com.holyeye.demo.domain.member.Member;
 import com.holyeye.demo.repository.MemberRepository;
 
 @Slf4j
-@Menu("B01")
+@Menu("B0101")
 @Controller
 public class MemberController {
 
