@@ -1,0 +1,69 @@
+#parse("/include/header.vm")
+
+<script type="text/javascript">
+
+$().ready(function() {
+
+	$("#signupForm").validate({
+	
+		rules: {
+			name: "required",
+			age: {required:true, number:true}
+		}
+		
+	});
+});
+
+</script>
+<script type="text/javascript">
+
+/*
+	function formChecker(form) {
+	
+		if(!form.inputMenuId.value){
+			$("#inputMenuId").parent().parent().addClass("error");
+		}
+		
+		return false;
+	}
+*/	
+
+</script>
+
+<style type="text/css">
+input.error, textarea.error{
+  border:1px dashed red;
+}
+label.error{
+  margin-left:10px;
+  color:red;
+}
+</style>
+
+
+<form id="signupForm" class="form-horizontal" action="/member/saveMember" #*onsubmit="return formChecker(this);" *# >
+
+	<input type="hidden" name="id" value="$!member.id" />
+	
+	<legend>회원폼</legend>
+	<div class="control-group">
+		<label class="control-label" for="name">이름</label>
+		<div class="controls">
+			<input type="text" id="name" name="name" placeholder="홍길동" value="$!member.name">
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="age">나이</label>
+		<div class="controls">
+			<input type="text" id="age" name="age" placeholder="20" value="$!member.age">
+		</div>
+	</div>
+	
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary">저장</button>
+		<button type="button" class="btn" onclick="javascript:history.back(-1)">취소</button>
+	</div>
+</form>
+
+#parse("/include/footer.vm")

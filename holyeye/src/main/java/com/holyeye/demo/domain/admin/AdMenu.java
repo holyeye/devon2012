@@ -15,14 +15,14 @@ import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Type;
 
-import com.holyeye.demo.domain.BaseEntity;
+import com.holyeye.demo.domain.BaseDateEntity;
 import com.holyeye.demo.domain.admin.usertype.TargetType;
 import com.holyeye.demo.domain.admin.usertype.TargetType.TargetTypeConverter;
 
 @Getter
 @Setter
 @Entity(name = "TEST_ADMENU")
-public class AdMenu extends BaseEntity<Long> {
+public class AdMenu extends BaseDateEntity<Long> {
 
 	String menuId;
 	String menuName;

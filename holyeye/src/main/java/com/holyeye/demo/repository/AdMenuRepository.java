@@ -14,6 +14,5 @@ import com.holyeye.demo.domain.admin.AdMenu;
 public interface AdMenuRepository extends JpaRepository<AdMenu, Long>, QueryDslPredicateExecutor<AdMenu>{
 
 	@Query("from TEST_ADMENU")
-	@QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
 	List<AdMenu> findAllData();
 }
