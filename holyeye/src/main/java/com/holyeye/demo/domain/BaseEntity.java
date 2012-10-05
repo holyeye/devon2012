@@ -41,15 +41,6 @@ public abstract class BaseEntity<PK extends Serializable> extends AbstractPersis
 
 	private static final long serialVersionUID = -8669707500586538457L;
 	
-	private String createdBy;
-	private String lastModifiedBy;
-
-	@Column(length = 14)
-	private String createdDttm;
-
-	@Column(length = 14)
-	private String lastModifiedDttm;
-	
 	/*
 	 *	편리를 위해 setId를 오픈합니다.
 	 *	부모처럼 protected로 두게되면 web에서 수정시 id값을 바인딩 받지 못합니다.
@@ -57,28 +48,6 @@ public abstract class BaseEntity<PK extends Serializable> extends AbstractPersis
 	@Override
 	public void setId(PK id) {
 		super.setId(id);
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		lastModifiedDttm = getNowTime();
-	}
-
-	@PrePersist
-	public void prePersist() {
-		String nowTime = getNowTime();
-		createdDttm = nowTime;
-		lastModifiedDttm = nowTime;
-	}
-
-	public static String getNowTime() {
-		return getTime("yyyyMMddHHmmss");
-	}
-
-	public static String getTime(String format) {
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		return sdf.format(cal.getTime());
 	}
 
 }
