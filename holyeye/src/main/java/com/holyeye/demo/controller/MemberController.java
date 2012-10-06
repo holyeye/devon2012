@@ -8,6 +8,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,10 @@ import com.holyeye.demo.commons.enumeration.PersistentEnumUtil;
 import com.holyeye.demo.domain.admin.AdMenu;
 import com.holyeye.demo.domain.admin.usertype.TargetType;
 import com.holyeye.demo.domain.member.Member;
+import com.holyeye.demo.domain.member.QMember;
+import com.holyeye.demo.domain.member.cond.MemberCond;
 import com.holyeye.demo.repository.MemberRepository;
+import com.mysema.query.BooleanBuilder;
 
 @Slf4j
 @Menu("B0101")
@@ -27,9 +31,10 @@ public class MemberController {
 	@Autowired MemberRepository memberRepository;
 
 	@RequestMapping("member/home")
-	public String home(Model model) {
+	public String home(MemberCond cond, Model model) {
 
-		List<Member> members = memberRepository.findAll();
+		//QUERY DSL
+		Iterable<Member> members = memberRepository.findAll(cond.toDSL());
 		model.addAttribute("members", members);
 
 		return "member/home";

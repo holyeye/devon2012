@@ -18,15 +18,46 @@
 	</script>
 	
 	<script type="text/javascript">
+	
+	$().ready(function() {
+	
+		$("#searchForm").validate({
+		
+			rules: {
+				age: {required:false, number:true}
+			}
+			
+		});
+	});
+	
+	</script>	
+	
+	<script type="text/javascript">
 		function insertForm(){
 			location.href = "/member/memberSaveForm";
 		}
 	</script>
+	
+	<style type="text/css">
+	input.error, textarea.error{
+	  border:1px dashed red;
+	}
+	label.error{
+	  margin-left:10px;
+	  color:red;
+	}
+	</style>	
 
 	<div class="content">
 		
 		<h3>회원관리</h3>
 		<hr>
+		<form id="searchForm" class="form-inline">
+		  이름 : <input type="text" name="name" class="input-small" placeholder="이름">
+		  나이 : <input type="text" name="age" class="input-small" placeholder="나이">
+		  <button type="submit" class="btn">검색</button>
+		</form>
+		
 		<button class="btn btn-primary" type="button" onclick="insertForm();">등록</button>
 
 		<table class="table table-striped table-bordered">
