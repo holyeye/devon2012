@@ -77,11 +77,11 @@ public class QueryTest {
 		
 		QMember m = QMember.member;
 		
-		OrderSpecifier<Integer> desc = m.age.desc();
-		
-		
 		int pageNo = 0;	int size = 3;
-		Pageable pageable = new PageRequest(pageNo, size, Direction.DESC, "age");
+		Pageable pageable = new PageRequest(pageNo, size, sortBy(Direction.DESC, m.age));
+		
+		OrderSpecifier<Integer> desc = m.age.desc();
+		sortBy(desc);
 		
 		BooleanBuilder where = new BooleanBuilder();
 		where.and(m.name.startsWith("김"));
@@ -94,9 +94,25 @@ public class QueryTest {
 			System.out.println(member.getName());
 		}
 	}
+
+	private Sort sortBy(OrderSpecifier order) {
+//		Expression target = order.getTarget();
+//	    return new Sort(order.isAscending() ? Direction.ASC : Direction.DESC,
+//	    		order.getTarget().path.getMetadata().getExpression().toString());
+		return null;
+	}
+
+	
+	private Sort sortBy(Direction direction, com.mysema.query.types.Path<?> path) {
+	    return new Sort(direction, path.getMetadata().getExpression().toString());
+	}
 	
 	public static void main(String[] args) {
 		QMember m = QMember.member;
+		
+		m.age.desc().getTarget();
+		System.out.println(m.age.desc().getTarget().toString());
+		
 		NumberPath<Integer> target = (NumberPath<Integer>) m.age.desc().getTarget();
 		
 		System.out.println(m.age.getMetadata().getExpression());
