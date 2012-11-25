@@ -23,9 +23,14 @@ import com.holyeye.demo.domain.member.Member;
 @Getter
 @Entity
 public class MemberCard extends BaseEntity<Long>{
-
-	public MemberCard() {
+	
+	public void payMoney(int money) {
+		CardPoint createCardPoint = card.createCardPoint(money);
+		addCardPoint(createCardPoint);
 	}
+	
+
+	public MemberCard() {}
 	
 	public MemberCard(Member member, Card card) {
 		setMember(member);
@@ -53,10 +58,6 @@ public class MemberCard extends BaseEntity<Long>{
 	}
 
 	//BIZ
-	public void payMoney(int money) {
-		CardPoint createCardPoint = card.createCardPoint(money);
-		addCardPoint(createCardPoint);
-	}
 	
 	//VIEW
 	public int getTotalPoint() {

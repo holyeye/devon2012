@@ -9,6 +9,7 @@ import com.holyeye.demo.domain.BaseEntity;
 
 import lombok.Getter;
 
+@SuppressWarnings("serial")
 @Getter
 @Entity
 public class CardPoint extends BaseEntity<Long>{

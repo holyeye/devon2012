@@ -15,6 +15,7 @@ import com.holyeye.demo.domain.BaseDateEntity;
 import com.holyeye.demo.domain.BaseEntity;
 import com.holyeye.demo.domain.membercard.MemberCard;
 
+@SuppressWarnings("serial")
 @Getter @Setter
 @Entity
 public class Member extends BaseEntity<Long>{

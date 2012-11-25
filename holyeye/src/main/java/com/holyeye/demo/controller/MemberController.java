@@ -22,6 +22,7 @@ import com.holyeye.demo.domain.member.QMember;
 import com.holyeye.demo.domain.member.cond.MemberCond;
 import com.holyeye.demo.repository.MemberRepository;
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.types.expr.BooleanExpression;
 
 @Slf4j
 @Menu("B0101")
@@ -32,8 +33,12 @@ public class MemberController {
 
 	@RequestMapping("member/home")
 	public String home(MemberCond cond, Model model) {
-
+		
 		//QUERY DSL
+//		QMember qMember = QMember.member;
+//		BooleanExpression containsName = qMember.name.contains(cond.getName());
+//		BooleanExpression gtAge = qMember.age.gt(cond.getAge());
+		
 		Iterable<Member> members = memberRepository.findAll(cond.toDSL());
 		model.addAttribute("members", members);
 

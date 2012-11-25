@@ -49,4 +49,5 @@ public class CardController {
 		model.addAttribute("card", card);
 		return "card/cardSaveForm";
 	}
+	
 }

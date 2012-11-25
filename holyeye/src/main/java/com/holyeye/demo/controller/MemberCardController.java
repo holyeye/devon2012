@@ -52,7 +52,9 @@ public class MemberCardController {
 	}
 
 	@RequestMapping("memberCard/saveMemberCard")
-	public String saveMenu(@RequestParam("memberId") Member member, @RequestParam("cardId") Card card) {
+	public String saveMemberCard(
+			@RequestParam("memberId") Member member,
+			@RequestParam("cardId") Card card) {
 
 		MemberCard memberCard = new MemberCard(member, card);
 		memberCardRepository.save(memberCard);
@@ -61,7 +63,9 @@ public class MemberCardController {
 	}
 	
 	@RequestMapping("memberCard/payMoney")
-	public String payMoney(@RequestParam("memberCardId") MemberCard memberCard, @RequestParam("money") int money) {
+	public String payMoney(
+			@RequestParam("memberCardId") MemberCard memberCard,
+			@RequestParam("money") int money) {
 		
 		memberCardService.payMoney(memberCard, money);
 		
