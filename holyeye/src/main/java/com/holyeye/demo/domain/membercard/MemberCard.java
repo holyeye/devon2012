@@ -18,6 +18,7 @@ import com.holyeye.demo.domain.BaseDateEntity;
 import com.holyeye.demo.domain.BaseEntity;
 import com.holyeye.demo.domain.card.Card;
 import com.holyeye.demo.domain.member.Member;
+import com.mysema.query.annotations.QueryInit;
 
 @Slf4j
 @Getter

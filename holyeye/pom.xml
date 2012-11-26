@@ -12,13 +12,14 @@
 		<spring.version>3.1.3.RELEASE</spring.version>
 		<jpa.version>2.0.0</jpa.version>
 		<hibernate.version>4.1.6.Final</hibernate.version>
-		<querydsl.version>2.7.0</querydsl.version>
+		<querydsl.version>2.9.0</querydsl.version>
 		<slf4j.version>1.6.1</slf4j.version>
 		<aspectj.version>1.6.8</aspectj.version>
 		
 		<java-version>1.6</java-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.test.failure.ignore>true</maven.test.failure.ignore>
 	</properties>
 	
 	<dependencies>
@@ -338,6 +339,7 @@
 	
 	<build>
 		<finalName>holyeye</finalName>
+		<!-- 
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -363,6 +365,7 @@
 				</excludes>
 			</testResource>
 		</testResources>
+		 -->
 		
 		<plugins>
 			<plugin>
@@ -392,6 +395,41 @@
 					<wtpContextName>/</wtpContextName>
 				</configuration>
 			</plugin>			
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-resource</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>target/generated-sources/java</directory>
+                                    <targetPath>resources</targetPath>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
