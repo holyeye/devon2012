@@ -13,6 +13,7 @@ public class MemberDTO {
 	private String name;
 	private int age;
 	private long cardCount;
+	private String cardName;
 	
 	@QueryProjection
 	public MemberDTO(Long id, String name, int age) {
@@ -27,6 +28,14 @@ public class MemberDTO {
 		this.name = name;
 		this.age = age;
 		this.cardCount = cardCount;
+	}
+	
+	@QueryProjection
+	public MemberDTO(Long id, String name, int age, String cardName) {
+		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.cardName = cardName;
 	}
 	
 	@QueryProjection

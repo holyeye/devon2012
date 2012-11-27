@@ -32,12 +32,16 @@ import com.holyeye.demo.domain.card.Card;
 import com.holyeye.demo.domain.card.QCard;
 import com.holyeye.demo.domain.member.Member;
 import com.holyeye.demo.domain.member.QMember;
+import com.holyeye.demo.domain.membercard.MemberCard;
 import com.holyeye.demo.domain.membercard.QMemberCard;
 import com.holyeye.demo.repository.CardRepository;
+import com.holyeye.demo.repository.MemberCardRepository;
 import com.holyeye.demo.repository.MemberRepository;
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.SearchResults;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.jpa.impl.JPASubQuery;
+import com.mysema.query.types.ConstructorExpression;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.NumberExpression;
@@ -49,6 +53,7 @@ import com.mysema.query.types.path.NumberPath;
 public class QueryTest {
 	
 	@Autowired MemberRepository memberRepository;
+	@Autowired MemberCardRepository memberCardRepository;
 	@Autowired CardRepository cardRepository;
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -77,6 +82,55 @@ public class QueryTest {
 		}
 	}
 	
+
+	@Test
+	public void speficicationsQuery() {
+
+		Specification<Member> firstNameLike = MemberSpecs.isFirstName("김");
+		Specification<Member> ageBetween = MemberSpecs.ageBetween(20, 40);
+		
+		Specifications<Member> specs = Specifications.where(firstNameLike).and(ageBetween);
+	
+		int pageNo = 0;	int size = 3;
+		Pageable pageable = new PageRequest(pageNo, size, Sort.Direction.DESC, "age");
+		
+		Page<Member> pageResult = memberRepository.findAll(specs, pageable);
+		List<Member> list = pageResult.getContent();
+		
+		for (Member member : list) {
+			System.out.println(member.getName());
+		}
+		
+	}
+	
+	public static class MemberSpecs {
+
+		public static Specification<Member> isFirstName(final String firstName){
+			return new Specification<Member>() {
+				@Override
+				public Predicate toPredicate(Root<Member> root, CriteriaQuery<?> query,
+						CriteriaBuilder cb) {
+					Path<String> namePath = root.get("name");
+					return cb.like(namePath, firstName+"%");
+				}
+			};
+		}
+		
+		public static Specification<Member> ageBetween(final int min, final int max){
+			return new Specification<Member>() {
+				@Override
+				public Predicate toPredicate(Root<Member> root, CriteriaQuery<?> query,
+						CriteriaBuilder cb) {
+					Path<Integer> age = root.get("age");
+					return cb.between(age, min, max);
+				}
+			};
+		}		
+	}	
+	
+	
+	//QUERYDSL + SpringData
+	
 	@Test
 	public void querydslQuery() {
 		
@@ -93,6 +147,60 @@ public class QueryTest {
 		}
 		
 	}
+	
+	@Test
+	public void querydslSpringDataSubQuery() {
+		
+		QCard $card = QCard.card;
+		QMember $member = new QMember("member1");
+		QMember $subMember = new QMember("sub");
+		QMemberCard $memberCard = QMemberCard.memberCard;
+		
+		BooleanExpression predicate = 
+				$member.id.in(
+					new JPASubQuery().from($subMember).where($subMember.name.startsWith("김")).list($subMember.id)
+				);
+		
+		Iterable<Member> content = memberRepository.findAll(predicate);
+		
+		for (Member member : content) {
+			System.out.println(member);
+		}
+		
+	}	
+	
+	@Test
+	public void querydslQuery22() {
+		
+		QCard $card = QCard.card;
+		QMember $member = QMember.member;
+		QMemberCard $memberCard = QMemberCard.memberCard;
+		
+		BooleanExpression predicate = $member.memberCards.any().card.name.like("%%");
+		Iterable<Member> content = memberRepository.findAll(predicate);
+		
+		for (Member member : content) {
+			System.out.println(member.getName());
+		}
+		
+	}
+	
+	@Test
+	public void querydslQuery33() {
+		
+		QCard $card = QCard.card;
+		QMember $member = QMember.member;
+		QMemberCard $memberCard = QMemberCard.memberCard;
+		
+		BooleanExpression predicate = $memberCard.card.name.like("%%");
+		Iterable<MemberCard> content = memberCardRepository.findAll(predicate);
+		
+		for (MemberCard member : content) {
+//			System.out.println(member);
+		}
+		
+	}
+	
 	
 	@Test
 	public void querydslWithBuilderQuery() {
@@ -146,7 +254,6 @@ public class QueryTest {
 				query.from(m).innerJoin(m.memberCards, mc)
 				.where(m.age.between(20, 40))
 				.list(m);
-		
 		for (Member member : list) {
 			System.out.println(member.getName());
 		}
@@ -176,7 +283,7 @@ public class QueryTest {
 	}
 	
 	@Test
-	public void querydslWithJoinDTO() {
+	public void querydslDTO() {
 		
 		String str = "김";
 		int min=20,max=40;
@@ -199,16 +306,37 @@ public class QueryTest {
 	}
 	
 	@Test
+	public void querydslQueryJoinDTO() {
+		
+		QCard $card = QCard.card;
+		QMember $member = QMember.member;
+		QMemberCard $memberCard = QMemberCard.memberCard;
+		
+		JPAQuery query = new JPAQuery(entityManager);
+		List<MemberDTO> list = query.from($member)
+				.join($member.memberCards, $memberCard)
+				.join($memberCard.card, $card)
+//				.list(new QMemberDTO(m.id, m.name, m.age, c.name));
+				.list(ConstructorExpression.create(MemberDTO.class, $member.id, $member.name, $member.age, $card.name));
+		
+		System.out.println("QueryTest.querydslQueryJoinFetch()");
+		for (MemberDTO memberDto : list) {
+			System.out.println(memberDto);
+		}
+		
+	}
+	
+	@Test
 	public void querydslDelegateMethodQuery() {
 
 		String firstname = "김";
 		
 		QMember m = QMember.member;
-//		Iterable<Member> results = memberRepository.findAll(m.isAdult().and(m.hasFirstname(firstname)));
-//		
-//		for (Member member : results) {
-//			System.out.println(member.getName());
-//		}
+		Iterable<Member> results = memberRepository.findAll(m.isAdult().and(m.hasFirstname(firstname)));
+		
+		for (Member member : results) {
+			System.out.println(member.getName());
+		}
 		
 	}
 	
@@ -227,7 +355,29 @@ public class QueryTest {
 			System.out.println(member.getName());
 		}
 		
-	}	
+	}
+	
+	
+	@Test
+	public void querydslQueryJoinFetch() {
+		
+		QCard c = QCard.card;
+		QMember m = QMember.member;
+		QMemberCard mc = QMemberCard.memberCard;
+		
+		JPAQuery query = new JPAQuery(entityManager);
+		List<Member> list = query.from(m).join(m.memberCards, mc).join(mc.card, c).list(m);
+//		List<Member> list = query.from(m).join(m.memberCards, mc).fetch().join(mc.card, c).fetch().list(m);
+		
+		System.out.println("QueryTest.querydslQueryJoinFetch()");
+		for (Member member : list) {
+			System.out.println(member.getMemberCards().get(0).getCard().getName());
+		}
+		
+		
+	}
+	
+	
 	
 
 	private Sort sortBy(OrderSpecifier order) {
@@ -254,48 +404,4 @@ public class QueryTest {
 	}
 	
 	
-	@Test
-	public void speficicationsQuery() {
-
-		Specification<Member> firstNameLike = MemberSpecs.isFirstName("김");
-		Specification<Member> ageBetween = MemberSpecs.ageBetween(20, 40);
-		
-		Specifications<Member> specs = Specifications.where(firstNameLike).and(ageBetween);
-	
-		int pageNo = 0;	int size = 3;
-		Pageable pageable = new PageRequest(pageNo, size, Sort.Direction.DESC, "age");
-		
-		Page<Member> pageResult = memberRepository.findAll(specs, pageable);
-		List<Member> list = pageResult.getContent();
-		
-		for (Member member : list) {
-			System.out.println(member.getName());
-		}
-		
-	}
-	
-	public static class MemberSpecs {
-
-		public static Specification<Member> isFirstName(final String firstName){
-			return new Specification<Member>() {
-				@Override
-				public Predicate toPredicate(Root<Member> root, CriteriaQuery<?> query,
-						CriteriaBuilder cb) {
-					Path<String> namePath = root.get("name");
-					return cb.like(namePath, firstName+"%");
-				}
-			};
-		}
-		
-		public static Specification<Member> ageBetween(final int min, final int max){
-			return new Specification<Member>() {
-				@Override
-				public Predicate toPredicate(Root<Member> root, CriteriaQuery<?> query,
-						CriteriaBuilder cb) {
-					Path<Integer> age = root.get("age");
-					return cb.between(age, min, max);
-				}
-			};
-		}		
-	}
 }
