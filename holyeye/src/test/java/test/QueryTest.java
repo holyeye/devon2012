@@ -43,6 +43,8 @@ import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.jpa.impl.JPASubQuery;
 import com.mysema.query.types.ConstructorExpression;
 import com.mysema.query.types.OrderSpecifier;
+import com.mysema.query.types.Projections;
+import com.mysema.query.types.QBean;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.NumberExpression;
 import com.mysema.query.types.path.NumberPath;
@@ -306,6 +308,27 @@ public class QueryTest {
 	}
 	
 	@Test
+	public void querydslDTOByQBean() {
+		
+		QMember m = QMember.member;
+		QMemberCard mc = QMemberCard.memberCard;
+		
+		JPAQuery query = new JPAQuery(entityManager);
+		
+		List<MemberDTO> list = 
+				query.from(m).innerJoin(m.memberCards, mc)
+				.where(m.age.between(20, 40))
+				.groupBy(m.id, m.name, m.age)
+//				.list(ConstructorExpression.create(MemberDTO.class, m.id, m.name, m.age));	//순수하게
+//				.list(new QMemberDTO(m.id, m.name, m.age, m.count()));	//@QueryProjection으로 생성된 QType으로 
+				.list(Projections.bean(MemberDTO.class, m.id, m.name, m.age, m.count().as("count")));	//@QueryProjection으로 생성된 QType으로 
+		
+		for (MemberDTO member : list) {
+			System.out.println("print=" + member);
+		}
+	}
+	
+	@Test
 	public void querydslQueryJoinDTO() {
 		
 		QCard $card = QCard.card;
@@ -317,7 +340,25 @@ public class QueryTest {
 				.join($member.memberCards, $memberCard)
 				.join($memberCard.card, $card)
 //				.list(new QMemberDTO(m.id, m.name, m.age, c.name));
-				.list(ConstructorExpression.create(MemberDTO.class, $member.id, $member.name, $member.age, $card.name));
+//				.list(ConstructorExpression.create(MemberDTO.class, $member.id, $member.name, $member.age, $card.name));
+				.list(Projections.fields(MemberDTO.class, $member.id, $member.name, $member.age, $card.name.as("cardName")));
+		
+		System.out.println("QueryTest.querydslQueryJoinFetch()");
+		for (MemberDTO memberDto : list) {
+			System.out.println(memberDto);
+		}
+		
+	}
+	
+	@Test
+	public void querydslQueryJoinDTO2() {
+		
+		QMember $m = QMember.member;
+		
+		JPAQuery query = new JPAQuery(entityManager);
+		
+		List<MemberDTO> list = query.from($m)
+				.list(Projections.bean(MemberDTO.class, $m.id, $m.name, $m.age));
 		
 		System.out.println("QueryTest.querydslQueryJoinFetch()");
 		for (MemberDTO memberDto : list) {

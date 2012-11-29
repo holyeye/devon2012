@@ -6,7 +6,6 @@ import lombok.ToString;
 import com.mysema.query.annotations.QueryProjection;
 import com.mysema.query.annotations.QueryType;
 
-@Data
 public class MemberDTO {
 
 	private Long id;
@@ -14,6 +13,10 @@ public class MemberDTO {
 	private int age;
 	private long cardCount;
 	private String cardName;
+	private Long count;
+	
+	public MemberDTO() {
+	}
 	
 	@QueryProjection
 	public MemberDTO(Long id, String name, int age) {
@@ -43,5 +46,55 @@ public class MemberDTO {
 		this.name = name;
 		this.age = age;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public long getCardCount() {
+		return cardCount;
+	}
+
+	public void setCardCount(long cardCount) {
+		this.cardCount = cardCount;
+	}
+
+	public String getCardName() {
+		return cardName;
+	}
+
+	public void setCardName(String cardName) {
+		this.cardName = cardName;
+	}
+
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
+	}
+	
+	
 	
 }
